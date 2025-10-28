@@ -22,22 +22,43 @@ export function OrderDialog({ open, onOpenChange, productTitle }: OrderDialogPro
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
+  const [error, setError] = useState("")
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
+    setError("")
 
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 1000))
+    try {
+      const response = await fetch("/api/send-email", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...formData,
+          productTitle,
+        }),
+      })
 
-    setIsSubmitting(false)
-    setIsSubmitted(true)
-    setFormData({ name: "", phone: "", message: "" })
+      const data = await response.json()
 
-    setTimeout(() => {
-      setIsSubmitted(false)
-      onOpenChange(false)
-    }, 2000)
+      if (!response.ok) {
+        throw new Error(data.error || "Ошибка при отправке")
+      }
+
+      setIsSubmitted(true)
+      setFormData({ name: "", phone: "", message: "" })
+
+      setTimeout(() => {
+        setIsSubmitted(false)
+        onOpenChange(false)
+      }, 5000)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Произошла ошибка")
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -99,7 +120,23 @@ export function OrderDialog({ open, onOpenChange, productTitle }: OrderDialogPro
             />
           </div>
 
-          <Button type="submit" className="w-full h-12" disabled={isSubmitting}>
+          {error && (
+            <div className="p-3 bg-destructive/10 border border-destructive/20 rounded-lg text-destructive text-sm">
+              {error}
+            </div>
+          )}
+
+          {isSubmitted && (
+            <div className="p-4 bg-primary/10 border border-primary/20 rounded-lg">
+              <h3 className="font-bold text-lg mb-2 text-primary">Спасибо за заявку!</h3>
+              <p className="text-sm text-muted-foreground">
+                Ваша заявка успешно отправлена. Наш менеджер свяжется с вами в ближайшее время для уточнения деталей
+                заказа.
+              </p>
+            </div>
+          )}
+
+          <Button type="submit" className="w-full h-12" disabled={isSubmitting || isSubmitted}>
             {isSubmitting ? "Отправка..." : isSubmitted ? "Заявка отправлена!" : "Отправить заявку"}
           </Button>
 
