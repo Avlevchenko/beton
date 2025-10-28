@@ -13,7 +13,9 @@ interface HeroProps {
 export function Hero({ city }: HeroProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
 
-  const title = city ? `Бетон высшего качества в ${city.namePrepositional}` : "Бетон высшего качества в Калининграде"
+  const title = city
+    ? `Бетон высшего качества с доставкой в ${city.namePrepositional}`
+    : "Бетон высшего качества с доставкой в Калининграде"
 
   const description = city
     ? `Производим и доставляем бетон любых марок в ${city.name} напрямую с завода. ${city.description ? `${city.name} — ${city.description}.` : ""} Без посредников — экономия до 30%. Гарантия качества и точные сроки.`
@@ -29,7 +31,7 @@ export function Hero({ city }: HeroProps) {
                 <span className="text-sm font-medium">Прямые поставки от завода</span>
               </div>
 
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight text-balance">{title}</h1>
+              <h1 className="text-4xl md:text-5xl lg:text-[65px] font-bold mb-6 leading-tight text-balance">{title}</h1>
 
               <p className="text-xl text-muted-foreground mb-8 leading-relaxed text-pretty">{description}</p>
 

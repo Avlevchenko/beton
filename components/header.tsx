@@ -18,10 +18,7 @@ export function Header({ currentCity }: HeaderProps) {
               <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
                 <span className="text-primary-foreground font-bold text-xl">Б</span>
               </div>
-              <div>
-                <h1 className="font-bold text-xl leading-tight">БетонПрямо</h1>
-                <p className="text-xs text-muted-foreground">Завод-производитель</p>
-              </div>
+              <p className="text-xl font-bold">БетонПрямо</p>
             </Link>
 
             <DropdownMenu>

@@ -19,10 +19,7 @@ export function Footer({ city }: FooterProps) {
               <div className="w-10 h-10 bg-primary-foreground rounded-lg flex items-center justify-center">
                 <span className="text-primary font-bold text-xl">Б</span>
               </div>
-              <div>
-                <h3 className="font-bold text-lg">БетонПрямо</h3>
-                <p className="text-xs opacity-80">Завод-производитель</p>
-              </div>
+              <p className="text-xl font-bold">БетонПрямо</p>
             </div>
             <p className="text-sm opacity-80 leading-relaxed">{locationText}</p>
           </div>
