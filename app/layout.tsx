@@ -11,6 +11,10 @@ export const metadata: Metadata = {
   description:
     "Качественный бетон напрямую от завода-производителя. Доставка по Калининграду и области. Лучшие цены без посредников.",
   generator: "v0.app",
+  icons: {
+    icon: "/icon.svg",
+    apple: "/icon.svg",
+  },
 }
 
 export default function RootLayout({
