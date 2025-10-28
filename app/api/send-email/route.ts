@@ -14,7 +14,7 @@ export async function POST(request: Request) {
     const chatId = process.env.TELEGRAM_CHAT_ID
 
     if (!botToken || !chatId) {
-      console.error("[v0] Missing Telegram credentials")
+      console.error("[v0] Missing Telegram credentials - botToken:", !!botToken, "chatId:", !!chatId)
       return NextResponse.json({ error: "Telegram не настроен" }, { status: 500 })
     }
 
@@ -34,6 +34,8 @@ ${message ? `\n💬 Комментарий:\n${message}` : ""}
 
     const telegramApiUrl = `https://api.telegram.org/bot${botToken}/sendMessage`
 
+    console.log("[v0] Sending to Telegram, chatId:", chatId)
+
     const response = await fetch(telegramApiUrl, {
       method: "POST",
       headers: {
@@ -42,21 +44,27 @@ ${message ? `\n💬 Комментарий:\n${message}` : ""}
       body: JSON.stringify({
         chat_id: chatId,
         text: telegramMessage,
-        parse_mode: "HTML",
       }),
     })
 
     if (!response.ok) {
       const errorData = await response.json()
-      console.error("[v0] Telegram API error:", errorData)
-      return NextResponse.json({ error: "Ошибка отправки в Telegram" }, { status: 500 })
+      console.error("[v0] Telegram API error:", JSON.stringify(errorData, null, 2))
+      console.error("[v0] Response status:", response.status)
+      return NextResponse.json(
+        {
+          error: "Ошибка отправки в Telegram",
+          details: errorData.description || "Неизвестная ошибка",
+        },
+        { status: 500 },
+      )
     }
 
     const result = await response.json()
     console.log("[v0] Message sent to Telegram successfully:", result.result.message_id)
     return NextResponse.json({ success: true, messageId: result.result.message_id })
   } catch (error) {
-    console.error("[v0] Server error:", error)
+    console.error("[v0] Server error:", error instanceof Error ? error.message : error)
     return NextResponse.json({ error: "Произошла ошибка сервера" }, { status: 500 })
   }
 }
