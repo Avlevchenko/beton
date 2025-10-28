@@ -4,9 +4,20 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { ArrowRight } from "lucide-react"
 import { OrderDialog } from "./order-dialog"
+import type { CityData } from "@/lib/cities"
 
-export function Hero() {
+interface HeroProps {
+  city?: CityData
+}
+
+export function Hero({ city }: HeroProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
+
+  const title = city ? `Бетон высшего качества в ${city.namePrepositional}` : "Бетон высшего качества в Калининграде"
+
+  const description = city
+    ? `Производим и доставляем бетон любых марок в ${city.name} напрямую с завода. ${city.description ? `${city.name} — ${city.description}.` : ""} Без посредников — экономия до 30%. Гарантия качества и точные сроки.`
+    : "Производим и доставляем бетон любых марок напрямую с завода. Без посредников — экономия до 30%. Гарантия качества и точные сроки."
 
   return (
     <>
@@ -18,14 +29,22 @@ export function Hero() {
                 <span className="text-sm font-medium">Прямые поставки от завода</span>
               </div>
 
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight text-balance">
-                Бетон высшего качества в Калининграде
-              </h1>
+              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight text-balance">{title}</h1>
 
-              <p className="text-xl text-muted-foreground mb-8 leading-relaxed text-pretty">
-                Производим и доставляем бетон любых марок напрямую с завода. Без посредников — экономия до 30%. Гарантия
-                качества и точные сроки.
-              </p>
+              <p className="text-xl text-muted-foreground mb-8 leading-relaxed text-pretty">{description}</p>
+
+              {city && city.distance && (
+                <div className="mb-6 p-4 bg-muted/50 rounded-lg border border-border">
+                  <p className="text-sm text-muted-foreground">
+                    <span className="font-semibold text-foreground">Расстояние от завода:</span> {city.distance}
+                  </p>
+                  {city.population && (
+                    <p className="text-sm text-muted-foreground mt-1">
+                      <span className="font-semibold text-foreground">Население:</span> {city.population}
+                    </p>
+                  )}
+                </div>
+              )}
 
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button size="lg" className="text-lg h-14 px-8" onClick={() => setIsDialogOpen(true)}>
@@ -42,7 +61,7 @@ export function Hero() {
               <div className="aspect-square rounded-2xl overflow-hidden bg-muted">
                 <img
                   src="/concrete-mixer-truck-delivering-concrete-at-constr.jpg"
-                  alt="Доставка бетона"
+                  alt={`Доставка бетона в ${city?.namePrepositional || "Калининграде"}`}
                   className="w-full h-full object-cover"
                 />
               </div>
@@ -63,7 +82,7 @@ export function Hero() {
         </div>
       </section>
 
-      <OrderDialog open={isDialogOpen} onOpenChange={setIsDialogOpen} />
+      <OrderDialog open={isDialogOpen} onOpenChange={setIsDialogOpen} city={city} />
     </>
   )
 }

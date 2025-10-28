@@ -1,0 +1,209 @@
+export interface CityData {
+  slug: string
+  name: string
+  nameGenitive: string // родительный падеж: "Советска"
+  namePrepositional: string // предложный падеж: "Советске"
+  description: string
+  population?: string
+  distance?: string
+}
+
+export const cities: CityData[] = [
+  {
+    slug: "sovetsk",
+    name: "Советск",
+    nameGenitive: "Советска",
+    namePrepositional: "Советске",
+    description: "крупный промышленный город на границе с Литвой",
+    population: "40 тыс. человек",
+    distance: "120 км от Калининграда",
+  },
+  {
+    slug: "chernyahovsk",
+    name: "Черняховск",
+    nameGenitive: "Черняховска",
+    namePrepositional: "Черняховске",
+    description: "важный транспортный узел области",
+    population: "36 тыс. человек",
+    distance: "85 км от Калининграда",
+  },
+  {
+    slug: "gusev",
+    name: "Гусев",
+    nameGenitive: "Гусева",
+    namePrepositional: "Гусеве",
+    description: "город с развитой промышленностью",
+    population: "28 тыс. человек",
+    distance: "110 км от Калининграда",
+  },
+  {
+    slug: "baltiysk",
+    name: "Балтийск",
+    nameGenitive: "Балтийска",
+    namePrepositional: "Балтийске",
+    description: "главная военно-морская база Балтийского флота",
+    population: "33 тыс. человек",
+    distance: "43 км от Калининграда",
+  },
+  {
+    slug: "svetly",
+    name: "Светлый",
+    nameGenitive: "Светлого",
+    namePrepositional: "Светлом",
+    description: "город металлургов на берегу Калининградского залива",
+    population: "21 тыс. человек",
+    distance: "35 км от Калининграда",
+  },
+  {
+    slug: "zelenogradsk",
+    name: "Зеленоградск",
+    nameGenitive: "Зеленоградска",
+    namePrepositional: "Зеленоградске",
+    description: "популярный курортный город на побережье Балтийского моря",
+    population: "16 тыс. человек",
+    distance: "32 км от Калининграда",
+  },
+  {
+    slug: "pionersky",
+    name: "Пионерский",
+    nameGenitive: "Пионерского",
+    namePrepositional: "Пионерском",
+    description: "небольшой курортный город на Балтийском побережье",
+    population: "11 тыс. человек",
+    distance: "45 км от Калининграда",
+  },
+  {
+    slug: "svetlogorsk",
+    name: "Светлогорск",
+    nameGenitive: "Светлогорска",
+    namePrepositional: "Светлогорске",
+    description: "известный курорт с уникальной архитектурой",
+    population: "13 тыс. человек",
+    distance: "39 км от Калининграда",
+  },
+  {
+    slug: "gvardeysk",
+    name: "Гвардейск",
+    nameGenitive: "Гвардейска",
+    namePrepositional: "Гвардейске",
+    description: "районный центр с развитым сельским хозяйством",
+    population: "13 тыс. человек",
+    distance: "45 км от Калининграда",
+  },
+  {
+    slug: "polessk",
+    name: "Полесск",
+    nameGenitive: "Полесска",
+    namePrepositional: "Полесске",
+    description: "город в центральной части области",
+    population: "7 тыс. человек",
+    distance: "52 км от Калининграда",
+  },
+  {
+    slug: "slavsk",
+    name: "Славск",
+    nameGenitive: "Славска",
+    namePrepositional: "Славске",
+    description: "небольшой город в живописной местности",
+    population: "4 тыс. человек",
+    distance: "120 км от Калининграда",
+  },
+  {
+    slug: "neman",
+    name: "Неман",
+    nameGenitive: "Немана",
+    namePrepositional: "Немане",
+    description: "город на берегу реки Неман",
+    population: "11 тыс. человек",
+    distance: "130 км от Калининграда",
+  },
+  {
+    slug: "krasnoznamensk",
+    name: "Краснознаменск",
+    nameGenitive: "Краснознаменска",
+    namePrepositional: "Краснознаменске",
+    description: "город в восточной части области",
+    population: "3 тыс. человек",
+    distance: "165 км от Калининграда",
+  },
+  {
+    slug: "nesterov",
+    name: "Нестеров",
+    nameGenitive: "Нестерова",
+    namePrepositional: "Нестерове",
+    description: "приграничный город с Литвой",
+    population: "4 тыс. человек",
+    distance: "140 км от Калининграда",
+  },
+  {
+    slug: "ozersk",
+    name: "Озёрск",
+    nameGenitive: "Озёрска",
+    namePrepositional: "Озёрске",
+    description: "город среди озёр и лесов",
+    population: "5 тыс. человек",
+    distance: "130 км от Калининграда",
+  },
+  {
+    slug: "pravdinsk",
+    name: "Правдинск",
+    nameGenitive: "Правдинска",
+    namePrepositional: "Правдинске",
+    description: "районный центр с богатой историей",
+    population: "4 тыс. человек",
+    distance: "65 км от Калининграда",
+  },
+  {
+    slug: "bagrationovsk",
+    name: "Багратионовск",
+    nameGenitive: "Багратионовска",
+    namePrepositional: "Багратионовске",
+    description: "приграничный город с Польшей",
+    population: "6 тыс. человек",
+    distance: "37 км от Калининграда",
+  },
+  {
+    slug: "mamonovo",
+    name: "Мамоново",
+    nameGenitive: "Мамоново",
+    namePrepositional: "Мамоново",
+    description: "пограничный город на границе с Польшей",
+    population: "8 тыс. человек",
+    distance: "45 км от Калининграда",
+  },
+  {
+    slug: "ladushkin",
+    name: "Ладушкин",
+    nameGenitive: "Ладушкина",
+    namePrepositional: "Ладушкине",
+    description: "небольшой город на Калининградском заливе",
+    population: "3 тыс. человек",
+    distance: "50 км от Калининграда",
+  },
+  {
+    slug: "yantarny",
+    name: "Янтарный",
+    nameGenitive: "Янтарного",
+    namePrepositional: "Янтарном",
+    description: "центр янтарной промышленности России",
+    population: "5 тыс. человек",
+    distance: "48 км от Калининграда",
+  },
+  {
+    slug: "gurievsk",
+    name: "Гурьевск",
+    nameGenitive: "Гурьевска",
+    namePrepositional: "Гурьевске",
+    description: "город в пригородной зоне Калининграда",
+    population: "13 тыс. человек",
+    distance: "7 км от Калининграда",
+  },
+]
+
+export function getCityBySlug(slug: string): CityData | undefined {
+  return cities.find((city) => city.slug === slug)
+}
+
+export function getAllCitySlugs(): string[] {
+  return cities.map((city) => city.slug)
+}

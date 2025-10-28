@@ -2,63 +2,73 @@
 
 import { Card } from "@/components/ui/card"
 import { Factory, Award, Clock, Shield, Truck, Calculator, HeadphonesIcon, CheckCircle2, Zap } from "lucide-react"
+import type { CityData } from "@/lib/cities"
 
-const advantages = [
-  {
-    icon: Factory,
-    title: "Собственное производство",
-    description: "Работаем напрямую от завода-производителя без посредников. Контролируем качество на каждом этапе.",
-  },
-  {
-    icon: Award,
-    title: "Сертифицированная продукция",
-    description: "Все марки бетона соответствуют ГОСТ. Предоставляем паспорта качества и сертификаты на каждую партию.",
-  },
-  {
-    icon: Clock,
-    title: "Доставка точно в срок",
-    description: "Собственный автопарк из 15+ миксеров. Доставляем бетон в течение 2 часов с момента заказа.",
-  },
-  {
-    icon: Shield,
-    title: "Гарантия качества",
-    description: "Даем официальную гарантию на всю продукцию. Лабораторный контроль каждой партии бетона.",
-  },
-  {
-    icon: Calculator,
-    title: "Прозрачное ценообразование",
-    description: "Цены напрямую от производителя без наценок. Точный расчет необходимого объема бетона.",
-  },
-  {
-    icon: Truck,
-    title: "Бесплатная доставка",
-    description: "При заказе от 10 м³ доставка по Калининграду бесплатно. Работаем по всей области.",
-  },
-  {
-    icon: HeadphonesIcon,
-    title: "Техподдержка 24/7",
-    description: "Консультируем по выбору марки бетона и расчету объема. Всегда на связи по телефону и WhatsApp.",
-  },
-  {
-    icon: CheckCircle2,
-    title: "Работаем с НДС",
-    description: "Полный пакет документов для юридических лиц. Работаем по договору с отсрочкой платежа.",
-  },
-  {
-    icon: Zap,
-    title: "Современное оборудование",
-    description: "Автоматизированный бетонный узел последнего поколения. Высокая точность дозирования компонентов.",
-  },
-]
+interface AdvantagesProps {
+  city?: CityData
+}
 
-export function Advantages() {
+export function Advantages({ city }: AdvantagesProps) {
+  const cityNamePrepositional = city?.namePrepositional || "Калининграде"
+  const cityNameGenitive = city?.nameGenitive || "Калининграда"
+  const cityName = city?.name
+
+  const advantages = [
+    {
+      icon: Factory,
+      title: "Собственное производство",
+      description: "Работаем напрямую от завода-производителя без посредников. Контролируем качество на каждом этапе.",
+    },
+    {
+      icon: Award,
+      title: "Сертифицированная продукция",
+      description:
+        "Все марки бетона соответствуют ГОСТ. Предоставляем паспорта качества и сертификаты на каждую партию.",
+    },
+    {
+      icon: Clock,
+      title: "Доставка точно в срок",
+      description: `Собственный автопарк из 15+ миксеров. Доставляем бетон в ${cityName || "любую точку"} в течение 2 часов с момента заказа.`,
+    },
+    {
+      icon: Shield,
+      title: "Гарантия качества",
+      description: "Даем официальную гарантию на всю продукцию. Лабораторный контроль каждой партии бетона.",
+    },
+    {
+      icon: Calculator,
+      title: "Прозрачное ценообразование",
+      description: "Цены напрямую от производителя без наценок. Точный расчет необходимого объема бетона.",
+    },
+    {
+      icon: Truck,
+      title: "Бесплатная доставка",
+      description: `При заказе от 10 м³ доставка в ${cityName || "Калининград"} бесплатно. Работаем по всей области.`,
+    },
+    {
+      icon: HeadphonesIcon,
+      title: "Техподдержка 24/7",
+      description: "Консультируем по выбору марки бетона и расчету объема. Всегда на связи по телефону и WhatsApp.",
+    },
+    {
+      icon: CheckCircle2,
+      title: "Работаем с НДС",
+      description: "Полный пакет документов для юридических лиц. Работаем по договору с отсрочкой платежа.",
+    },
+    {
+      icon: Zap,
+      title: "Современное оборудование",
+      description: "Автоматизированный бетонный узел последнего поколения. Высокая точность дозирования компонентов.",
+    },
+  ]
+
   return (
     <section className="py-20 px-4 bg-background">
       <div className="container mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-4xl md:text-5xl font-bold mb-4 text-balance">Преимущества работы с нами</h2>
           <p className="text-xl text-muted-foreground text-pretty max-w-3xl mx-auto">
-            Более 10 лет на рынке производства и поставки бетона в Калининграде
+            Более 10 лет на рынке производства и поставки бетона в {cityNamePrepositional} и Калининградской области
           </p>
         </div>
 

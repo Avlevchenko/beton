@@ -1,3 +1,5 @@
+import type { CityData } from "@/lib/cities"
+
 const steps = [
   {
     number: "01",
@@ -21,13 +23,21 @@ const steps = [
   },
 ]
 
-export function Process() {
+interface ProcessProps {
+  city?: CityData
+}
+
+export function Process({ city }: ProcessProps) {
+  const cityName = city?.name || "вашего объекта"
+
   return (
     <section className="py-20 px-4 bg-secondary/30">
       <div className="container mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-4xl md:text-5xl font-bold mb-4 text-balance">Как мы работаем</h2>
-          <p className="text-xl text-muted-foreground text-pretty">Простой процесс от заявки до доставки</p>
+          <p className="text-xl text-muted-foreground text-pretty">
+            Простой процесс от заявки до доставки в {cityName}
+          </p>
         </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">

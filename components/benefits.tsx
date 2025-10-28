@@ -1,30 +1,37 @@
 import { Truck, Clock, Shield, Percent } from "lucide-react"
 import { Card } from "@/components/ui/card"
+import type { CityData } from "@/lib/cities"
 
-const benefits = [
-  {
-    icon: Truck,
-    title: "Собственный автопарк",
-    description: "Более 20 миксеров для доставки в любую точку области",
-  },
-  {
-    icon: Clock,
-    title: "Доставка за 2 часа",
-    description: "Быстрая подача бетона точно в срок",
-  },
-  {
-    icon: Shield,
-    title: "Гарантия качества",
-    description: "Сертифицированная продукция с паспортом качества",
-  },
-  {
-    icon: Percent,
-    title: "Цены от завода",
-    description: "Экономия до 30% без посредников",
-  },
-]
+interface BenefitsProps {
+  city?: CityData
+}
 
-export function Benefits() {
+export function Benefits({ city }: BenefitsProps) {
+  const cityName = city?.name || "области"
+
+  const benefits = [
+    {
+      icon: Truck,
+      title: "Собственный автопарк",
+      description: `Более 20 миксеров для доставки в ${cityName}`,
+    },
+    {
+      icon: Clock,
+      title: "Доставка за 2 часа",
+      description: `Быстрая подача бетона в ${cityName} точно в срок`,
+    },
+    {
+      icon: Shield,
+      title: "Гарантия качества",
+      description: "Сертифицированная продукция с паспортом качества",
+    },
+    {
+      icon: Percent,
+      title: "Цены от завода",
+      description: "Экономия до 30% без посредников",
+    },
+  ]
+
   return (
     <section className="py-20 px-4 bg-secondary/30">
       <div className="container mx-auto">

@@ -1,7 +1,6 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -9,8 +8,13 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Phone, Mail, MapPin } from "lucide-react"
+import type { CityData } from "@/lib/cities"
 
-export function ContactForm() {
+interface ContactFormProps {
+  city?: CityData
+}
+
+export function ContactForm({ city }: ContactFormProps) {
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -31,7 +35,10 @@ export function ContactForm() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          city: city?.name || "Калининград",
+        }),
       })
 
       const data = await response.json()
@@ -177,7 +184,7 @@ export function ContactForm() {
                 </div>
                 <div>
                   <h3 className="font-bold mb-2">Адрес завода</h3>
-                  <p className="text-lg font-medium">г. Калининград</p>
+                  <p className="text-lg font-medium">Калининград</p>
                   <p className="text-sm text-muted-foreground mt-1">ул. Производственная, 15</p>
                 </div>
               </div>

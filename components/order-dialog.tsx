@@ -7,14 +7,16 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import type { CityData } from "@/lib/cities"
 
 interface OrderDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
   productTitle?: string
+  city?: CityData
 }
 
-export function OrderDialog({ open, onOpenChange, productTitle }: OrderDialogProps) {
+export function OrderDialog({ open, onOpenChange, productTitle, city }: OrderDialogProps) {
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -38,6 +40,7 @@ export function OrderDialog({ open, onOpenChange, productTitle }: OrderDialogPro
         body: JSON.stringify({
           ...formData,
           productTitle,
+          city: city?.name || "Калининград",
         }),
       })
 
@@ -77,6 +80,7 @@ export function OrderDialog({ open, onOpenChange, productTitle }: OrderDialogPro
           </DialogTitle>
           <DialogDescription>
             Заполните форму и мы свяжемся с вами в течение 15 минут для уточнения деталей заказа
+            {city ? ` в ${city.namePrepositional}` : ""}
           </DialogDescription>
         </DialogHeader>
 

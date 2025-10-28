@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Check } from "lucide-react"
 import { OrderDialog } from "./order-dialog"
+import type { CityData } from "@/lib/cities"
 
 const products = [
   {
@@ -34,7 +35,11 @@ const products = [
   },
 ]
 
-export function Products() {
+interface ProductsProps {
+  city?: CityData
+}
+
+export function Products({ city }: ProductsProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [selectedProduct, setSelectedProduct] = useState<string>("")
 
@@ -43,6 +48,8 @@ export function Products() {
     setIsDialogOpen(true)
   }
 
+  const cityNamePrepositional = city?.namePrepositional || "Калининграду"
+
   return (
     <>
       <section className="py-20 px-4 bg-background">
@@ -50,7 +57,7 @@ export function Products() {
           <div className="text-center mb-12">
             <h2 className="text-4xl md:text-5xl font-bold mb-4 text-balance">Популярные марки бетона</h2>
             <p className="text-xl text-muted-foreground text-pretty">
-              Производим все марки бетона по ГОСТ с доставкой по Калининграду
+              Производим все марки бетона по ГОСТ с доставкой по {cityNamePrepositional}
             </p>
           </div>
 
@@ -99,7 +106,7 @@ export function Products() {
         </div>
       </section>
 
-      <OrderDialog open={isDialogOpen} onOpenChange={setIsDialogOpen} productTitle={selectedProduct} />
+      <OrderDialog open={isDialogOpen} onOpenChange={setIsDialogOpen} productTitle={selectedProduct} city={city} />
     </>
   )
 }

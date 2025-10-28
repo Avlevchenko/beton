@@ -2,6 +2,7 @@
 
 import { Card } from "@/components/ui/card"
 import { Building2, Home, Factory, Warehouse, Truck, Hammer } from "lucide-react"
+import type { CityData } from "@/lib/cities"
 
 const concreteUsage = [
   {
@@ -48,14 +49,20 @@ const concreteUsage = [
   },
 ]
 
-export function ConcreteGuide() {
+interface ConcreteGuideProps {
+  city?: CityData
+}
+
+export function ConcreteGuide({ city }: ConcreteGuideProps) {
+  const cityNamePrepositional = city?.namePrepositional || "Калининграде"
+
   return (
     <section className="py-20 px-4 bg-muted/30">
       <div className="container mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-4xl md:text-5xl font-bold mb-4 text-balance">Какой бетон для чего использовать?</h2>
           <p className="text-xl text-muted-foreground text-pretty max-w-3xl mx-auto">
-            Подробное руководство по выбору марки бетона в зависимости от типа строительных работ
+            Подробное руководство по выбору марки бетона для строительства в {cityNamePrepositional}
           </p>
         </div>
 
@@ -91,8 +98,8 @@ export function ConcreteGuide() {
           <Card className="p-8 max-w-4xl mx-auto bg-primary/5 border-primary/20">
             <h3 className="text-2xl font-bold mb-4">Не уверены в выборе марки бетона?</h3>
             <p className="text-lg text-muted-foreground mb-6">
-              Наши специалисты помогут подобрать оптимальную марку бетона для вашего проекта с учетом всех технических
-              требований и условий эксплуатации
+              Наши специалисты помогут подобрать оптимальную марку бетона для вашего проекта в {cityNamePrepositional} с
+              учетом всех технических требований и условий эксплуатации
             </p>
             <a
               href="#contact-form"

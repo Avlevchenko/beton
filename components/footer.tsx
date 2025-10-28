@@ -1,6 +1,15 @@
 import { MessageCircle, Phone, Mail } from "lucide-react"
+import type { CityData } from "@/lib/cities"
 
-export function Footer() {
+interface FooterProps {
+  city?: CityData
+}
+
+export function Footer({ city }: FooterProps) {
+  const locationText = city
+    ? `Производство и доставка качественного бетона в ${city.namePrepositional} и Калининградской области с 2009 года`
+    : "Производство и доставка качественного бетона в Калининграде и области с 2009 года"
+
   return (
     <footer className="bg-primary text-primary-foreground py-12 px-4">
       <div className="container mx-auto">
@@ -15,9 +24,7 @@ export function Footer() {
                 <p className="text-xs opacity-80">Завод-производитель</p>
               </div>
             </div>
-            <p className="text-sm opacity-80 leading-relaxed">
-              Производство и доставка качественного бетона в Калининграде и области с 2009 года
-            </p>
+            <p className="text-sm opacity-80 leading-relaxed">{locationText}</p>
           </div>
 
           <div>
