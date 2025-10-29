@@ -9,6 +9,8 @@ import { OrderDialog } from "@/components/order-dialog"
 import { getConcreteGradeBySlug, getAllConcreteGradeSlugs } from "@/lib/concrete-grades"
 import { getCityBySlug, getAllCitySlugs } from "@/lib/cities"
 
+export const dynamicParams = false
+
 export async function generateStaticParams() {
   const citySlugs = getAllCitySlugs()
   const gradeSlugs = getAllConcreteGradeSlugs()
@@ -23,9 +25,12 @@ export async function generateStaticParams() {
   return params
 }
 
-export async function generateMetadata({ params }: { params: { city: string; grade: string } }): Promise<Metadata> {
-  const city = getCityBySlug(params.city)
-  const grade = getConcreteGradeBySlug(params.grade)
+export async function generateMetadata({
+  params,
+}: { params: Promise<{ city: string; grade: string }> }): Promise<Metadata> {
+  const { city: citySlug, grade: gradeSlug } = await params
+  const city = getCityBySlug(citySlug)
+  const grade = getConcreteGradeBySlug(gradeSlug)
 
   if (!city || !grade) {
     return {
@@ -39,9 +44,10 @@ export async function generateMetadata({ params }: { params: { city: string; gra
   }
 }
 
-export default function CityConcreteGradePage({ params }: { params: { city: string; grade: string } }) {
-  const city = getCityBySlug(params.city)
-  const grade = getConcreteGradeBySlug(params.grade)
+export default async function CityConcreteGradePage({ params }: { params: Promise<{ city: string; grade: string }> }) {
+  const { city: citySlug, grade: gradeSlug } = await params
+  const city = getCityBySlug(citySlug)
+  const grade = getConcreteGradeBySlug(gradeSlug)
 
   if (!city || !grade) {
     notFound()
@@ -58,7 +64,7 @@ export default function CityConcreteGradePage({ params }: { params: { city: stri
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               <div>
                 <h1 className="text-[65px] leading-tight font-bold mb-6 text-balance">
-                  Доставка {grade.grade} в {city.nameAccusative}
+                  Доставка бетона {grade.grade} в {city.nameAccusative}
                 </h1>
                 <p className="text-xl text-muted-foreground mb-6 text-pretty">
                   {grade.fullDescription} Быстрая доставка бетона {grade.grade} в {city.nameAccusative} и окрестности
