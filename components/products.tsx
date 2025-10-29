@@ -3,19 +3,22 @@
 import { useState } from "react"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Check } from "lucide-react"
+import { Check, Info } from "lucide-react"
 import { OrderDialog } from "./order-dialog"
+import Link from "next/link"
 import type { CityData } from "@/lib/cities"
 
 const products = [
   {
     title: "Бетон М200",
+    slug: "m200",
     price: "от 3 500 ₽/м³",
     description: "Для фундаментов, стяжек, дорожек",
     features: ["Морозостойкость F150", "Водонепроницаемость W4", "Подвижность П3"],
   },
   {
     title: "Бетон М300",
+    slug: "m300",
     price: "от 4 200 ₽/м³",
     description: "Универсальный для строительства",
     features: ["Морозостойкость F200", "Водонепроницаемость W6", "Подвижность П4"],
@@ -23,12 +26,14 @@ const products = [
   },
   {
     title: "Бетон М350",
+    slug: "m350",
     price: "от 4 800 ₽/м³",
     description: "Для монолитных конструкций",
     features: ["Морозостойкость F200", "Водонепроницаемость W8", "Подвижность П4"],
   },
   {
     title: "Бетон М400",
+    slug: "m400",
     price: "от 5 400 ₽/м³",
     description: "Для специальных конструкций",
     features: ["Морозостойкость F300", "Водонепроницаемость W10", "Подвижность П4"],
@@ -86,13 +91,21 @@ export function Products({ city }: ProductsProps) {
                   ))}
                 </ul>
 
-                <Button
-                  className="w-full"
-                  variant={product.popular ? "default" : "outline"}
-                  onClick={() => handleOrderClick(product.title)}
-                >
-                  Заказать
-                </Button>
+                <div className="flex flex-col gap-2">
+                  <Button
+                    className="w-full"
+                    variant={product.popular ? "default" : "outline"}
+                    onClick={() => handleOrderClick(product.title)}
+                  >
+                    Заказать
+                  </Button>
+                  <Button className="w-full" variant="ghost" asChild>
+                    <Link href={`/beton/${product.slug}`}>
+                      <Info className="h-4 w-4 mr-2" />
+                      Подробнее
+                    </Link>
+                  </Button>
+                </div>
               </Card>
             ))}
           </div>
