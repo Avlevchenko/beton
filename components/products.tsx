@@ -100,7 +100,7 @@ export function Products({ city }: ProductsProps) {
                     Заказать
                   </Button>
                   <Button className="w-full" variant="ghost" asChild>
-                    <Link href={`/beton/${product.slug}`}>
+                    <Link href={city ? `/${city.slug}/beton/${product.slug}` : `/beton/${product.slug}`}>
                       <Info className="h-4 w-4 mr-2" />
                       Подробнее
                     </Link>
