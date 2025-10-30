@@ -7,6 +7,7 @@ import { Card } from "@/components/ui/card"
 import { Check, Package, Truck, Clock, Shield } from "lucide-react"
 import { OrderDialog } from "@/components/order-dialog"
 import { getConcreteGradeBySlug, getAllConcreteGradeSlugs } from "@/lib/concrete-grades"
+import { ContactForm } from "@/components/contact-form"
 
 export const dynamicParams = false
 
@@ -28,8 +29,8 @@ export async function generateMetadata({ params }: { params: Promise<{ grade: st
   }
 
   return {
-    title: `${grade.title} - Купить с доставкой в Калининграде | БетонПрямо`,
-    description: `${grade.fullDescription} Цена ${grade.price}. Доставка по Калининграду и области. Производство по ГОСТ.`,
+    title: `Купить бетон ${grade.grade} по цене производителя, с доставкой по Калининграду и области`,
+    description: `Заказать бетон ${grade.grade} по выгодной цене. Качественный бетон от завода производителя с доставкой по Калининграду и области`,
   }
 }
 
@@ -210,6 +211,13 @@ export default async function ConcreteGradePage({ params }: { params: Promise<{ 
                 Заказать бетон {grade.grade}
               </Button>
             </OrderDialog>
+          </div>
+        </section>
+
+        {/* Contact Form Section */}
+        <section className="py-20 px-4 bg-background">
+          <div className="container mx-auto max-w-6xl">
+            <ContactForm />
           </div>
         </section>
       </main>

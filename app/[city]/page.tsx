@@ -36,8 +36,8 @@ export async function generateMetadata({ params }: CityPageProps): Promise<Metad
   }
 
   return {
-    title: `Бетон в ${city.namePrepositional} | Доставка от производителя`,
-    description: `Производство и доставка бетона в ${city.namePrepositional}. Прямые поставки от завода. Все марки бетона. Быстрая доставка. Гарантия качества.`,
+    title: `Купить бетон в ${city.namePrepositional} с доставкой от 7600 руб/м3 I заказать бетон от производителя`,
+    description: `Купить бетон в ${city.namePrepositional}, доставка по городу и области, широкий ассортимент, хорошие цены и гибкую систему скидок, звоните, качество по ISO 9001:2000.`,
   }
 }
 

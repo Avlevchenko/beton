@@ -2,6 +2,7 @@ import { notFound } from "next/navigation"
 import type { Metadata } from "next"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
+import { ContactForm } from "@/components/contact-form"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Check, Package, Truck, Clock, Shield } from "lucide-react"
@@ -39,8 +40,8 @@ export async function generateMetadata({
   }
 
   return {
-    title: `Доставка ${grade.grade} в ${city.nameAccusative} - Купить бетон с доставкой | БетонПрямо`,
-    description: `${grade.fullDescription} Доставка ${grade.grade} в ${city.nameAccusative}. Цена ${grade.price}. Производство по ГОСТ. Собственный автопарк.`,
+    title: `Купить бетон ${grade.grade} по цене производителя, с доставкой по ${city.nameDative} и области`,
+    description: `Заказать бетон ${grade.grade} по выгодной цене. Качественный бетон от завода производителя с доставкой по ${city.nameDative} и области`,
   }
 }
 
@@ -241,6 +242,9 @@ export default async function CityConcreteGradePage({ params }: { params: Promis
             </OrderDialog>
           </div>
         </section>
+
+        {/* Contact Form Section */}
+        <ContactForm city={city} />
       </main>
 
       <Footer city={city} />
