@@ -51,7 +51,7 @@ export default async function ConcreteGradePage({ params }: { params: Promise<{ 
           <div className="container mx-auto max-w-6xl">
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               <div>
-                <h1 className="text-5xl lg:text-6xl font-bold mb-6 text-balance">{grade.title}</h1>
+                <h1 className="text-[65px] leading-tight font-bold mb-6 text-balance">Доставка бетона {grade.grade}</h1>
                 <p className="text-xl text-muted-foreground mb-6 text-pretty">{grade.fullDescription}</p>
                 <div className="flex items-baseline gap-4 mb-8">
                   <span className="text-4xl font-bold text-primary">{grade.price}</span>
