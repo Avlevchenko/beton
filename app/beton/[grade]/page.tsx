@@ -8,6 +8,8 @@ import { Check, Package, Truck, Clock, Shield } from "lucide-react"
 import { OrderDialog } from "@/components/order-dialog"
 import { getConcreteGradeBySlug, getAllConcreteGradeSlugs } from "@/lib/concrete-grades"
 
+export const dynamicParams = false
+
 export async function generateStaticParams() {
   const slugs = getAllConcreteGradeSlugs()
   return slugs.map((slug) => ({
@@ -15,8 +17,9 @@ export async function generateStaticParams() {
   }))
 }
 
-export async function generateMetadata({ params }: { params: { grade: string } }): Promise<Metadata> {
-  const grade = getConcreteGradeBySlug(params.grade)
+export async function generateMetadata({ params }: { params: Promise<{ grade: string }> }): Promise<Metadata> {
+  const { grade: gradeSlug } = await params
+  const grade = getConcreteGradeBySlug(gradeSlug)
 
   if (!grade) {
     return {
@@ -30,8 +33,9 @@ export async function generateMetadata({ params }: { params: { grade: string } }
   }
 }
 
-export default function ConcreteGradePage({ params }: { params: { grade: string } }) {
-  const grade = getConcreteGradeBySlug(params.grade)
+export default async function ConcreteGradePage({ params }: { params: Promise<{ grade: string }> }) {
+  const { grade: gradeSlug } = await params
+  const grade = getConcreteGradeBySlug(gradeSlug)
 
   if (!grade) {
     notFound()
