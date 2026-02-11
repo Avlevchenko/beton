@@ -21,9 +21,13 @@ export function Footer({ city }: FooterProps) {
         <div className="grid md:grid-cols-3 gap-8 mb-8">
           <div>
             <div className="flex items-center gap-2 mb-4">
-              <div className="w-10 h-10 bg-primary-foreground rounded-lg flex items-center justify-center">
-                <span className="text-primary font-bold text-xl">{config.logoText}</span>
-              </div>
+              {config.logoImage ? (
+                <img src={config.logoImage || "/placeholder.svg"} alt={config.companyName} className="w-10 h-10 rounded-lg object-contain" />
+              ) : (
+                <div className="w-10 h-10 bg-primary-foreground rounded-lg flex items-center justify-center">
+                  <span className="text-primary font-bold text-xl">{config.logoText}</span>
+                </div>
+              )}
               <p className="text-xl font-bold">{config.companyName}</p>
             </div>
             <p className="text-sm opacity-80 leading-relaxed">{locationText}</p>

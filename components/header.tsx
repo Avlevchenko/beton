@@ -20,9 +20,13 @@ export function Header({ currentCity }: HeaderProps) {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Link href="/" className="flex items-center gap-2">
-              <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
-                <span className="text-primary-foreground font-bold text-xl">{config.logoText}</span>
-              </div>
+              {config.logoImage ? (
+                <img src={config.logoImage || "/placeholder.svg"} alt={config.companyName} className="w-10 h-10 rounded-lg object-contain" />
+              ) : (
+                <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
+                  <span className="text-primary-foreground font-bold text-xl">{config.logoText}</span>
+                </div>
+              )}
               <p className="text-xl font-bold">{config.companyName}</p>
             </Link>
 

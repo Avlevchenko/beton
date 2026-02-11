@@ -1,13 +1,16 @@
 "use client"
 
 import type React from "react"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Lock, Save, LogOut, Phone, MessageCircle, Mail, MapPin, Building, Type, Eye } from "lucide-react"
-import type { SiteConfig } from "@/lib/site-config"
+import {
+  Lock, Save, LogOut, Phone, MessageCircle, Mail, MapPin,
+  Building, Eye, Upload, ImageIcon, Globe, RussianRuble,
+} from "lucide-react"
+import type { SiteConfig, PriceItem } from "@/lib/site-config"
 import Link from "next/link"
 
 export default function AdminPage() {
@@ -18,17 +21,20 @@ export default function AdminPage() {
   const [config, setConfig] = useState<SiteConfig | null>(null)
   const [isSaving, setIsSaving] = useState(false)
   const [saveMessage, setSaveMessage] = useState("")
+  const [uploading, setUploading] = useState<string | null>(null)
+  const logoInputRef = useRef<HTMLInputElement>(null)
+  const faviconInputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     const savedToken = sessionStorage.getItem("admin_token")
     if (savedToken) {
       setToken(savedToken)
       setIsAuthed(true)
-      loadConfig()
+      loadConfig(savedToken)
     }
   }, [])
 
-  const loadConfig = async () => {
+  const loadConfig = async (authToken?: string) => {
     try {
       const res = await fetch("/api/config")
       const data = await res.json()
@@ -60,7 +66,7 @@ export default function AdminPage() {
       sessionStorage.setItem("admin_token", data.token)
       setIsAuthed(true)
       setPassword("")
-      loadConfig()
+      loadConfig(data.token)
     } catch {
       setLoginError("Ошибка подключения к серверу")
     }
@@ -107,6 +113,46 @@ export default function AdminPage() {
   const updateField = (field: keyof SiteConfig, value: string) => {
     if (!config) return
     setConfig({ ...config, [field]: value })
+  }
+
+  const updatePrice = (slug: string, newPrice: string) => {
+    if (!config) return
+    const updatedPrices = config.prices.map((p) =>
+      p.slug === slug ? { ...p, price: newPrice } : p
+    )
+    setConfig({ ...config, prices: updatedPrices })
+  }
+
+  const handleFileUpload = async (file: File, type: "logo" | "favicon") => {
+    setUploading(type)
+    try {
+      const formData = new FormData()
+      formData.append("file", file)
+      formData.append("type", type)
+
+      const res = await fetch("/api/admin/upload", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+        body: formData,
+      })
+
+      const data = await res.json()
+
+      if (!res.ok) {
+        setSaveMessage(`Ошибка загрузки: ${data.error}`)
+        return
+      }
+
+      if (type === "logo") {
+        updateField("logoImage", data.url)
+      } else {
+        updateField("faviconUrl", data.url)
+      }
+    } catch {
+      setSaveMessage("Ошибка загрузки файла")
+    } finally {
+      setUploading(null)
+    }
   }
 
   if (!isAuthed) {
@@ -211,26 +257,192 @@ export default function AdminPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="grid md:grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="companyName">Название компании</Label>
-                  <Input
-                    id="companyName"
-                    value={config.companyName}
-                    onChange={(e) => updateField("companyName", e.target.value)}
-                    className="mt-2"
-                  />
+              <div>
+                <Label htmlFor="companyName">Название компании</Label>
+                <Input
+                  id="companyName"
+                  value={config.companyName}
+                  onChange={(e) => updateField("companyName", e.target.value)}
+                  className="mt-2"
+                />
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Logo */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <ImageIcon className="h-5 w-5 text-primary" />
+                Логотип
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex items-start gap-6">
+                <div className="shrink-0">
+                  <p className="text-sm text-muted-foreground mb-2">Текущий логотип:</p>
+                  <div className="w-20 h-20 rounded-xl border-2 border-dashed border-border flex items-center justify-center overflow-hidden bg-muted/50">
+                    {config.logoImage ? (
+                      <img src={config.logoImage || "/placeholder.svg"} alt="Логотип" className="w-full h-full object-contain" />
+                    ) : (
+                      <div className="w-full h-full bg-primary flex items-center justify-center">
+                        <span className="text-primary-foreground font-bold text-3xl">{config.logoText}</span>
+                      </div>
+                    )}
+                  </div>
                 </div>
-                <div>
-                  <Label htmlFor="logoText">Текст логотипа (1 символ)</Label>
-                  <Input
-                    id="logoText"
-                    value={config.logoText}
-                    onChange={(e) => updateField("logoText", e.target.value.slice(0, 2))}
-                    maxLength={2}
-                    className="mt-2"
-                  />
+                <div className="flex-1 space-y-3">
+                  <div>
+                    <Label>Загрузить изображение логотипа</Label>
+                    <p className="text-xs text-muted-foreground mt-1 mb-2">PNG или SVG, рекомендуемый размер 200x200px</p>
+                    <input
+                      ref={logoInputRef}
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0]
+                        if (file) handleFileUpload(file, "logo")
+                      }}
+                    />
+                    <Button
+                      variant="outline"
+                      onClick={() => logoInputRef.current?.click()}
+                      disabled={uploading === "logo"}
+                      className="bg-transparent"
+                    >
+                      <Upload className="h-4 w-4 mr-2" />
+                      {uploading === "logo" ? "Загрузка..." : "Выбрать файл"}
+                    </Button>
+                  </div>
+                  {config.logoImage && (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => updateField("logoImage", "")}
+                      className="text-destructive hover:text-destructive"
+                    >
+                      Удалить изображение (вернуть букву)
+                    </Button>
+                  )}
+                  {!config.logoImage && (
+                    <div>
+                      <Label htmlFor="logoText">Или текст логотипа (1-2 символа)</Label>
+                      <Input
+                        id="logoText"
+                        value={config.logoText}
+                        onChange={(e) => updateField("logoText", e.target.value.slice(0, 2))}
+                        maxLength={2}
+                        className="mt-2 w-24"
+                      />
+                    </div>
+                  )}
                 </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Favicon */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Globe className="h-5 w-5 text-primary" />
+                Favicon (иконка вкладки браузера)
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex items-start gap-6">
+                <div className="shrink-0">
+                  <p className="text-sm text-muted-foreground mb-2">Текущий favicon:</p>
+                  <div className="w-16 h-16 rounded-lg border-2 border-dashed border-border flex items-center justify-center overflow-hidden bg-muted/50">
+                    {config.faviconUrl ? (
+                      <img src={config.faviconUrl || "/placeholder.svg"} alt="Favicon" className="w-full h-full object-contain" />
+                    ) : (
+                      <Globe className="h-6 w-6 text-muted-foreground" />
+                    )}
+                  </div>
+                </div>
+                <div className="flex-1 space-y-3">
+                  <div>
+                    <Label>Загрузить favicon</Label>
+                    <p className="text-xs text-muted-foreground mt-1 mb-2">ICO, PNG или SVG, рекомендуемый размер 32x32px или 64x64px</p>
+                    <input
+                      ref={faviconInputRef}
+                      type="file"
+                      accept="image/*,.ico"
+                      className="hidden"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0]
+                        if (file) handleFileUpload(file, "favicon")
+                      }}
+                    />
+                    <Button
+                      variant="outline"
+                      onClick={() => faviconInputRef.current?.click()}
+                      disabled={uploading === "favicon"}
+                      className="bg-transparent"
+                    >
+                      <Upload className="h-4 w-4 mr-2" />
+                      {uploading === "favicon" ? "Загрузка..." : "Выбрать файл"}
+                    </Button>
+                  </div>
+                  {config.faviconUrl && (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => updateField("faviconUrl", "")}
+                      className="text-destructive hover:text-destructive"
+                    >
+                      Удалить favicon (вернуть стандартный)
+                    </Button>
+                  )}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Prices */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <RussianRuble className="h-5 w-5 text-primary" />
+                Цены на бетон
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground mb-4">
+                Измените цены и они обновятся на всех страницах сайта
+              </p>
+              <div className="border rounded-lg overflow-hidden">
+                <table className="w-full">
+                  <thead>
+                    <tr className="bg-muted/50 border-b">
+                      <th className="text-left px-4 py-3 text-sm font-semibold">Марка бетона</th>
+                      <th className="text-left px-4 py-3 text-sm font-semibold">Цена за м3 (руб.)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {config.prices.map((item) => (
+                      <tr key={item.slug} className="border-b last:border-b-0">
+                        <td className="px-4 py-3">
+                          <span className="font-semibold text-base">Бетон {item.grade}</span>
+                        </td>
+                        <td className="px-4 py-3">
+                          <div className="flex items-center gap-2">
+                            <span className="text-muted-foreground text-sm">от</span>
+                            <Input
+                              value={item.price}
+                              onChange={(e) => updatePrice(item.slug, e.target.value)}
+                              className="w-32"
+                              placeholder="0"
+                            />
+                            <span className="text-muted-foreground text-sm shrink-0">{'руб/м\u00B3'}</span>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             </CardContent>
           </Card>
@@ -266,11 +478,10 @@ export default function AdminPage() {
                   />
                 </div>
               </div>
-
               <div>
                 <Label htmlFor="email">Email</Label>
                 <div className="flex items-center gap-2 mt-2">
-                  <Mail className="h-4 w-4 text-muted-foreground" />
+                  <Mail className="h-4 w-4 text-muted-foreground shrink-0" />
                   <Input
                     id="email"
                     type="email"
@@ -301,7 +512,7 @@ export default function AdminPage() {
                   placeholder="https://wa.me/74012345678"
                   className="mt-2"
                 />
-                <p className="text-xs text-muted-foreground mt-1">Формат: https://wa.me/7XXXXXXXXXX</p>
+                <p className="text-xs text-muted-foreground mt-1">{'Формат: https://wa.me/7XXXXXXXXXX'}</p>
               </div>
               <div>
                 <Label htmlFor="telegram">Ссылка на Telegram</Label>
@@ -312,7 +523,7 @@ export default function AdminPage() {
                   placeholder="https://t.me/username"
                   className="mt-2"
                 />
-                <p className="text-xs text-muted-foreground mt-1">Формат: https://t.me/username (оставьте пустым если не нужен)</p>
+                <p className="text-xs text-muted-foreground mt-1">{'Формат: https://t.me/username'}</p>
               </div>
             </CardContent>
           </Card>
@@ -355,7 +566,7 @@ export default function AdminPage() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Type className="h-5 w-5 text-primary" />
+                <Eye className="h-5 w-5 text-primary" />
                 Режим работы
               </CardTitle>
             </CardHeader>
