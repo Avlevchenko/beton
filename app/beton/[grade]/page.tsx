@@ -8,6 +8,7 @@ import { Check, Package, Truck, Clock, Shield } from "lucide-react"
 import { OrderDialog } from "@/components/order-dialog"
 import { getConcreteGradeBySlug, getAllConcreteGradeSlugs } from "@/lib/concrete-grades"
 import { ContactForm } from "@/components/contact-form"
+import { SchemaMarkup } from "@/components/schema-markup"
 
 export const dynamicParams = false
 
@@ -44,6 +45,7 @@ export default async function ConcreteGradePage({ params }: { params: Promise<{ 
 
   return (
     <div className="min-h-screen flex flex-col">
+      <SchemaMarkup pageType="product" grade={grade} pageUrl={`/beton/${grade.slug}`} />
       <Header />
 
       <main className="flex-1">

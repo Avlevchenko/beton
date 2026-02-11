@@ -9,6 +9,7 @@ import { Advantages } from "@/components/advantages"
 import { SeoText } from "@/components/seo-text"
 import { ContactForm } from "@/components/contact-form"
 import { Footer } from "@/components/footer"
+import { SchemaMarkup } from "@/components/schema-markup"
 import { getCityBySlug, getAllCitySlugs } from "@/lib/cities"
 import type { Metadata } from "next"
 
@@ -51,6 +52,7 @@ export default async function CityPage({ params }: CityPageProps) {
 
   return (
     <main className="min-h-screen">
+      <SchemaMarkup pageType="city" city={city} pageUrl={`/${city.slug}`} />
       <Header currentCity={city} />
       <Hero city={city} />
       <Benefits city={city} />
