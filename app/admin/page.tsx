@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import {
   Lock, Save, LogOut, Phone, MessageCircle, Mail, MapPin,
-  Building, Eye, Upload, ImageIcon, Globe, RussianRuble,
+  Building, Eye, Upload, ImageIcon, Globe, RussianRuble, Send, Bell,
 } from "lucide-react"
 import type { SiteConfig, PriceItem } from "@/lib/site-config"
 import Link from "next/link"
@@ -36,7 +36,10 @@ export default function AdminPage() {
 
   const loadConfig = async (authToken?: string) => {
     try {
-      const res = await fetch("/api/config")
+      const t = authToken || token
+      const res = await fetch("/api/config", {
+        headers: t ? { Authorization: `Bearer ${t}` } : {},
+      })
       const data = await res.json()
       setConfig(data)
     } catch {
@@ -524,6 +527,76 @@ export default function AdminPage() {
                   className="mt-2"
                 />
                 <p className="text-xs text-muted-foreground mt-1">{'Формат: https://t.me/username'}</p>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Notifications - Telegram Bot */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Send className="h-5 w-5 text-primary" />
+                Telegram-бот для заявок
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="p-3 bg-muted/50 rounded-lg text-sm text-muted-foreground">
+                Укажите данные Telegram-бота для получения заявок с сайта. Создайте бота через @BotFather и получите токен.
+              </div>
+              <div>
+                <Label htmlFor="telegramBotToken">Токен бота (Bot Token)</Label>
+                <Input
+                  id="telegramBotToken"
+                  value={config.telegramBotToken}
+                  onChange={(e) => updateField("telegramBotToken", e.target.value)}
+                  placeholder="1234567890:ABCdefGHIjklMNOpqrsTUVwxyz"
+                  className="mt-2 font-mono text-sm"
+                />
+                <p className="text-xs text-muted-foreground mt-1">Получите у @BotFather в Telegram</p>
+              </div>
+              <div>
+                <Label htmlFor="telegramChatId">Chat ID (ID чата для получения заявок)</Label>
+                <Input
+                  id="telegramChatId"
+                  value={config.telegramChatId}
+                  onChange={(e) => updateField("telegramChatId", e.target.value)}
+                  placeholder="356221353"
+                  className="mt-2 font-mono text-sm"
+                />
+                <p className="text-xs text-muted-foreground mt-1">
+                  {"Напишите боту /start, затем откройте api.telegram.org/bot<TOKEN>/getUpdates для получения ID"}
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Notification Email */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Bell className="h-5 w-5 text-primary" />
+                Дублирование заявок на Email
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="p-3 bg-muted/50 rounded-lg text-sm text-muted-foreground">
+                Укажите email для дублирования заявок. Заявки будут приходить и в Telegram, и на указанный адрес.
+              </div>
+              <div>
+                <Label htmlFor="notificationEmail">Email для заявок</Label>
+                <div className="flex items-center gap-2 mt-2">
+                  <Mail className="h-4 w-4 text-muted-foreground shrink-0" />
+                  <Input
+                    id="notificationEmail"
+                    type="email"
+                    value={config.notificationEmail}
+                    onChange={(e) => updateField("notificationEmail", e.target.value)}
+                    placeholder="info@promo-links.ru"
+                  />
+                </div>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Для работы email-уведомлений необходимо добавить SMTP_HOST, SMTP_USER, SMTP_PASSWORD в переменные окружения
+                </p>
               </div>
             </CardContent>
           </Card>

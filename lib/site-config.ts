@@ -19,6 +19,9 @@ export interface SiteConfig {
   logoImage: string
   faviconUrl: string
   prices: PriceItem[]
+  telegramBotToken: string
+  telegramChatId: string
+  notificationEmail: string
 }
 
 export const defaultConfig: SiteConfig = {
@@ -41,4 +44,7 @@ export const defaultConfig: SiteConfig = {
     { slug: "m350", grade: "М350", price: "8 700" },
     { slug: "m400", grade: "М400", price: "9 300" },
   ],
+  telegramBotToken: "",
+  telegramChatId: "",
+  notificationEmail: "",
 }

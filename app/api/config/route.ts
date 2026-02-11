@@ -3,8 +3,24 @@ import { defaultConfig, type SiteConfig } from "@/lib/site-config"
 
 let siteConfig: SiteConfig = { ...defaultConfig }
 
-export async function GET() {
-  return NextResponse.json(siteConfig)
+// Экспорт для внутреннего использования серверными API
+export function getFullConfig(): SiteConfig {
+  return siteConfig
+}
+
+export async function GET(request: Request) {
+  const authHeader = request.headers.get("authorization")
+  const adminPassword = process.env.ADMIN_PASSWORD
+  const isAdmin = adminPassword && authHeader === `Bearer ${adminPassword}`
+
+  if (isAdmin) {
+    // Админ получает полный конфиг включая токены
+    return NextResponse.json(siteConfig)
+  }
+
+  // Публичный конфиг без секретных данных
+  const { telegramBotToken, telegramChatId, notificationEmail, ...publicConfig } = siteConfig
+  return NextResponse.json(publicConfig)
 }
 
 export async function POST(request: Request) {
