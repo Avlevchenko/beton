@@ -7,19 +7,18 @@ import { Check, Info } from "lucide-react"
 import { OrderDialog } from "./order-dialog"
 import Link from "next/link"
 import type { CityData } from "@/lib/cities"
+import { useConfig } from "@/components/config-provider"
 
-const products = [
+const productsBase = [
   {
     title: "Бетон М200",
     slug: "m200",
-    price: "от 7 100 ₽/м³",
     description: "Для фундаментов, стяжек, дорожек",
     features: ["Морозостойкость F150", "Водонепроницаемость W4", "Подвижность П3"],
   },
   {
     title: "Бетон М300",
     slug: "m300",
-    price: "от 8 300 ₽/м³",
     description: "Универсальный для строительства",
     features: ["Морозостойкость F200", "Водонепроницаемость W6", "Подвижность П4"],
     popular: true,
@@ -27,18 +26,18 @@ const products = [
   {
     title: "Бетон М350",
     slug: "m350",
-    price: "от 8 700 ₽/м³",
     description: "Для монолитных конструкций",
     features: ["Морозостойкость F200", "Водонепроницаемость W8", "Подвижность П4"],
   },
   {
     title: "Бетон М400",
     slug: "m400",
-    price: "от 9 300 ₽/м³",
     description: "Для специальных конструкций",
     features: ["Морозостойкость F300", "Водонепроницаемость W10", "Подвижность П4"],
   },
 ]
+
+const products = productsBase.map(product => ({ ...product, price: "1000 руб/м³" }));
 
 interface ProductsProps {
   city?: CityData
@@ -47,6 +46,15 @@ interface ProductsProps {
 export function Products({ city }: ProductsProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [selectedProduct, setSelectedProduct] = useState<string>("")
+  const config = useConfig()
+
+  const products = productsBase.map((p) => {
+    const priceItem = config.prices.find((pr) => pr.slug === p.slug)
+    return {
+      ...p,
+      price: priceItem ? `от ${priceItem.price} \u20BD/м\u00B3` : "",
+    }
+  })
 
   const handleOrderClick = (productTitle: string) => {
     setSelectedProduct(productTitle)

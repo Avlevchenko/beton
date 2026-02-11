@@ -1,11 +1,16 @@
+"use client"
+
 import { MessageCircle, Phone, Mail } from "lucide-react"
 import type { CityData } from "@/lib/cities"
+import { useConfig } from "@/components/config-provider"
 
 interface FooterProps {
   city?: CityData
 }
 
 export function Footer({ city }: FooterProps) {
+  const config = useConfig()
+
   const locationText = city
     ? `Производство и доставка качественного бетона в ${city.namePrepositional} и Калининградской области с 2009 года`
     : "Производство и доставка качественного бетона в Калининграде и области с 2009 года"
@@ -16,10 +21,14 @@ export function Footer({ city }: FooterProps) {
         <div className="grid md:grid-cols-3 gap-8 mb-8">
           <div>
             <div className="flex items-center gap-2 mb-4">
-              <div className="w-10 h-10 bg-primary-foreground rounded-lg flex items-center justify-center">
-                <span className="text-primary font-bold text-xl">Б</span>
-              </div>
-              <p className="text-xl font-bold">БетонПрямо</p>
+              {config.logoImage ? (
+                <img src={config.logoImage || "/placeholder.svg"} alt={config.companyName} className="w-10 h-10 rounded-lg object-contain" />
+              ) : (
+                <div className="w-10 h-10 bg-primary-foreground rounded-lg flex items-center justify-center">
+                  <span className="text-primary font-bold text-xl">{config.logoText}</span>
+                </div>
+              )}
+              <p className="text-xl font-bold">{config.companyName}</p>
             </div>
             <p className="text-sm opacity-80 leading-relaxed">{locationText}</p>
           </div>
@@ -28,27 +37,27 @@ export function Footer({ city }: FooterProps) {
             <h4 className="font-bold mb-4">Контакты</h4>
             <div className="space-y-3">
               <a
-                href="tel:+74012345678"
+                href={`tel:${config.phone}`}
                 className="flex items-center gap-2 text-sm hover:opacity-80 transition-opacity"
               >
                 <Phone className="h-4 w-4" />
-                +7 (401) 234-56-78
+                {config.phoneFormatted}
               </a>
               <a
-                href="mailto:info@betonpryamo.ru"
+                href={`mailto:${config.email}`}
                 className="flex items-center gap-2 text-sm hover:opacity-80 transition-opacity"
               >
                 <Mail className="h-4 w-4" />
-                info@betonpryamo.ru
+                {config.email}
               </a>
               <a
-                href="https://wa.me/74012345678"
+                href={config.whatsapp || config.telegram}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 text-sm hover:opacity-80 transition-opacity"
               >
                 <MessageCircle className="h-4 w-4" />
-                WhatsApp
+                {config.whatsapp ? "WhatsApp" : "Telegram"}
               </a>
             </div>
           </div>
@@ -56,15 +65,15 @@ export function Footer({ city }: FooterProps) {
           <div>
             <h4 className="font-bold mb-4">Режим работы</h4>
             <div className="space-y-2 text-sm">
-              <p>Понедельник - Пятница: 8:00 - 20:00</p>
-              <p>Суббота - Воскресенье: 9:00 - 18:00</p>
-              <p className="opacity-80 mt-4">г. Калининград, ул. Производственная, 15</p>
+              <p>{config.workHoursWeekdays}</p>
+              <p>{config.workHoursWeekends}</p>
+              <p className="opacity-80 mt-4">г. {config.addressCity}, {config.address}</p>
             </div>
           </div>
         </div>
 
         <div className="border-t border-primary-foreground/20 pt-8 text-center text-sm opacity-80">
-          <p>© 2025 БетонПрямо. Все права защищены.</p>
+          <p>© 2025 {config.companyName}. Все права защищены.</p>
         </div>
       </div>
     </footer>

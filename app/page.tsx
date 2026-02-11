@@ -8,6 +8,7 @@ import { Advantages } from "@/components/advantages"
 import { SeoText } from "@/components/seo-text"
 import { ContactForm } from "@/components/contact-form"
 import { Footer } from "@/components/footer"
+import { SchemaMarkup } from "@/components/schema-markup"
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
@@ -19,6 +20,7 @@ export const metadata: Metadata = {
 export default function Home() {
   return (
     <main className="min-h-screen">
+      <SchemaMarkup pageType="home" pageUrl="" />
       <Header />
       <Hero />
       <Benefits />

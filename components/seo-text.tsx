@@ -1,11 +1,15 @@
+"use client"
+
 import { Truck, Award, Clock, Shield, TrendingUp, Users } from "lucide-react"
 import type { CityData } from "@/lib/cities"
+import { useConfig } from "@/components/config-provider"
 
 interface SeoTextProps {
   city?: CityData
 }
 
 export function SeoText({ city }: SeoTextProps) {
+  const config = useConfig()
   const cityName = city?.name || "Калининграде"
   const cityNameGenitive = city?.nameGenitive || "Калининграда"
   const cityNamePrepositional = city?.namePrepositional || "Калининграде"
@@ -192,16 +196,16 @@ export function SeoText({ city }: SeoTextProps) {
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
             <a
-              href="tel:+74012345678"
+              href={`tel:${config.phone}`}
               className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-8 py-4 rounded-lg font-semibold hover:bg-primary/90 transition-colors"
             >
               <span>Позвонить сейчас</span>
             </a>
             <a
-              href="https://wa.me/74012345678"
+              href={config.whatsapp || config.telegram}
               className="inline-flex items-center gap-2 bg-[#25D366] text-white px-8 py-4 rounded-lg font-semibold hover:bg-[#25D366]/90 transition-colors"
             >
-              <span>Написать в WhatsApp</span>
+              <span>{config.whatsapp ? "Написать в WhatsApp" : "Написать в Telegram"}</span>
             </a>
           </div>
         </div>

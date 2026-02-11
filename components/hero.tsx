@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { ArrowRight } from "lucide-react"
 import { OrderDialog } from "./order-dialog"
 import type { CityData } from "@/lib/cities"
+import { useConfig } from "@/components/config-provider"
 
 interface HeroProps {
   city?: CityData
@@ -12,6 +13,7 @@ interface HeroProps {
 
 export function Hero({ city }: HeroProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const config = useConfig()
 
   const title = city
     ? `Бетон высшего качества с доставкой в ${city.namePrepositional}`
@@ -54,7 +56,7 @@ export function Hero({ city }: HeroProps) {
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
                 <Button size="lg" variant="outline" className="text-lg h-14 px-8 bg-transparent" asChild>
-                  <a href="tel:+74012345678">Позвонить сейчас</a>
+                  <a href={`tel:${config.phone}`}>Позвонить сейчас</a>
                 </Button>
               </div>
             </div>

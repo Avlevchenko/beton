@@ -9,6 +9,7 @@ import { Check, Package, Truck, Clock, Shield } from "lucide-react"
 import { OrderDialog } from "@/components/order-dialog"
 import { getConcreteGradeBySlug, getAllConcreteGradeSlugs } from "@/lib/concrete-grades"
 import { getCityBySlug, getAllCitySlugs } from "@/lib/cities"
+import { SchemaMarkup } from "@/components/schema-markup"
 
 export const dynamicParams = false
 
@@ -56,6 +57,7 @@ export default async function CityConcreteGradePage({ params }: { params: Promis
 
   return (
     <div className="min-h-screen flex flex-col">
+      <SchemaMarkup pageType="cityProduct" city={city} grade={grade} pageUrl={`/${city.slug}/beton/${grade.slug}`} />
       <Header currentCity={city} />
 
       <main className="flex-1">
