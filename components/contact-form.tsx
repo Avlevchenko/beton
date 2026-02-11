@@ -9,12 +9,14 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Phone, Mail, MapPin } from "lucide-react"
 import type { CityData } from "@/lib/cities"
+import { useConfig } from "@/components/config-provider"
 
 interface ContactFormProps {
   city?: CityData
 }
 
 export function ContactForm({ city }: ContactFormProps) {
+  const config = useConfig()
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -151,8 +153,8 @@ export function ContactForm({ city }: ContactFormProps) {
                 </div>
                 <div>
                   <h3 className="font-bold mb-2">Телефон</h3>
-                  <a href="tel:+74012345678" className="text-lg font-medium hover:text-primary transition-colors">
-                    +7 (401) 234-56-78
+                  <a href={`tel:${config.phone}`} className="text-lg font-medium hover:text-primary transition-colors">
+                    {config.phoneFormatted}
                   </a>
                   <p className="text-sm text-muted-foreground mt-1">Ежедневно 8:00 - 20:00</p>
                 </div>
@@ -167,10 +169,10 @@ export function ContactForm({ city }: ContactFormProps) {
                 <div>
                   <h3 className="font-bold mb-2">Email</h3>
                   <a
-                    href="mailto:info@betonpryamo.ru"
+                    href={`mailto:${config.email}`}
                     className="text-lg font-medium hover:text-primary transition-colors"
                   >
-                    info@betonpryamo.ru
+                    {config.email}
                   </a>
                   <p className="text-sm text-muted-foreground mt-1">Ответим в течение часа</p>
                 </div>
@@ -184,8 +186,8 @@ export function ContactForm({ city }: ContactFormProps) {
                 </div>
                 <div>
                   <h3 className="font-bold mb-2">Адрес завода</h3>
-                  <p className="text-lg font-medium">Калининград</p>
-                  <p className="text-sm text-muted-foreground mt-1">ул. Производственная, 15</p>
+                  <p className="text-lg font-medium">{config.addressCity}</p>
+                  <p className="text-sm text-muted-foreground mt-1">{config.address}</p>
                 </div>
               </div>
             </Card>
